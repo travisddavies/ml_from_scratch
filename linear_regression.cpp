@@ -2,6 +2,7 @@
 #include <vector>
 #include <string>
 #include <cstdlib>
+#include <iostream>
 
 class LinearRegression {
 public:
@@ -12,13 +13,13 @@ public:
     int n_epoch;
     int batch_no;
     void fit(std::vector<std::vector<double>> &X, std::vector<double> &y);
-    std::vector<std::vector<double>> predict();
+    std::vector<double> predict(std::vector<std::vector<double>> &X);
 
 private:
     std::vector<std::vector<double>> transverse_matrix(std::vector<std::vector<double>> &X);
     double dot_product(std::vector<std::vector<double>> &X_T, int col_no);
     double get_average_error(std::vector<double> &y_hat, std::vector<double> &y);
-    void adjust_weights(std::vector<double> &y_hat, std::vector<double> &y, std::vector<std::vector<double>> X_T);
+    void adjust_weights(std::vector<double> &y_hat, std::vector<double> &y, std::vector<std::vector<double>> &X);
 };
 
 LinearRegression::LinearRegression(double eta,double bias,int n_epoch, int batch_no)
@@ -30,13 +31,23 @@ void LinearRegression::fit(std::vector<std::vector<double>> &X, std::vector<doub
 
     std::vector<std::vector<double>> X_T = transverse_matrix(X);
     std::vector<double> predictions;
+
     for (int epoch = 0; epoch < n_epoch; epoch++) {
         for (int col_no = 0; col_no < X_T[0].size(); col_no++) {
             double curr_dot_product = dot_product(X_T, col_no);
             predictions.push_back(curr_dot_product);
         }
-        adjust_weights(predictions, y, X_T);
+        adjust_weights(predictions, y, X);
     }
+}
+
+std::vector<double> LinearRegression::predict(std::vector<std::vector<double>> &X) {
+    std::vector<std::vector<double>> X_T = transverse_matrix(X);
+    std::vector<double> y_hat;
+    for (int i = 0; i < X.size(); i++) {
+        y_hat.push_back(dot_product(X_T, i));
+    }
+    return y_hat;
 }
 
 double LinearRegression::dot_product(std::vector<std::vector<double>> &X_T, int col_no) {
@@ -47,7 +58,7 @@ double LinearRegression::dot_product(std::vector<std::vector<double>> &X_T, int 
     return total;
 }
 
-std::vector<std::vector<double>> transverse_matrix(std::vector<std::vector<double>> &X) {
+std::vector<std::vector<double>> LinearRegression::transverse_matrix(std::vector<std::vector<double>> &X) {
     std::vector<std::vector<double>> trans_matrix;
     for (int i = X.size() - 1; i >= 0; i--) {
         trans_matrix.push_back(X[i]);
@@ -67,12 +78,21 @@ std::vector<std::vector<double>> transverse_matrix(std::vector<std::vector<doubl
 void LinearRegression::adjust_weights(
         std::vector<double> &y_hat,
         std::vector<double> &y,
-        std::vector<std::vector<double>> X_T) {
-
+        std::vector<std::vector<double>> &X) {
+    for (int i = 0; i < y_hat.size(); i++) {
+        for (int j = 0; j < X[i].size(); j++) {
+            double delta_theta_j = -eta * (y_hat[i] - y[i]) * X[i][j];
+            params[j] += delta_theta_j;
+        }
+    }
 }
 
 int main (int argc, char *argv[]) {
     std::string filename = argv[1];
+    std::cout << filename << "\n";
+    for (int i = 0; i < 5; i++)
+        std::cout << "hi\n";
     std::vector<std::vector<double>> data = read_csv(filename);
+    read_csv(filename);
     return 0;
 }
