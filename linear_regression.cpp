@@ -1,6 +1,5 @@
 #include "file_parsing.h"
 #include <vector>
-#include <string>
 #include <cstdlib>
 #include <iostream>
 
@@ -87,12 +86,33 @@ void LinearRegression::adjust_weights(
     }
 }
 
+std::vector<std::vector<double>> extract_X(std::vector<std::vector<double>> total_data) {
+    std::vector<std::vector<double>> X;
+    for (int i = 0; i < total_data.size(); i++) {
+        std::vector<double> x;
+        for (int j = 0; j < total_data[i].size() - 1; j++) {
+            x.push_back(total_data[i][j]);
+        }
+        X.push_back(x);
+    }
+    return X;
+}
+
+std::vector<double> extract_y(std::vector<std::vector<double>> total_data) {
+    std::vector<double> y;
+    int y_index = total_data[0].size() - 1;
+    for (int i = 0; i < total_data.size(); i++) {
+        y.push_back(total_data[i][y_index]);
+    }
+    return y;
+}
+
+
 int main (int argc, char *argv[]) {
     std::string filename = argv[1];
-    std::cout << filename << "\n";
-    for (int i = 0; i < 5; i++)
-        std::cout << "hi\n";
     std::vector<std::vector<double>> data = read_csv(filename);
-    read_csv(filename);
+    std::vector<double> y = extract_y(data);
+    std::vector<std::vector<double>> X = extract_X(data);
+    std::cout << X[0].size() << "\n" << y[0] << "\n";
     return 0;
 }
