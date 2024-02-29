@@ -78,9 +78,8 @@ void LinearRegression::adjust_weights(
             double delta_theta_j = -eta * (y_hat[i] - y[i]) * X[i][j];
             params[j] += delta_theta_j;
         }
-        y_hat.pop_back();
     }
-    std::cout << y_hat.size() << "\n";
+    y_hat.clear();
 }
 
 std::vector<std::vector<double>> extract_X(std::vector<std::vector<double>> total_data) {
