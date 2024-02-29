@@ -30,7 +30,7 @@ void LinearRegression::fit(std::vector<std::vector<double>> &X, std::vector<doub
     std::vector<double> predictions;
 
     for (int epoch = 0; epoch < n_epoch; epoch++) {
-        for (int col_no = 0; col_no < X_T[0].size(); col_no++) {
+       for (int col_no = 0; col_no < X_T[0].size(); col_no++) {
             double curr_dot_product = dot_product(X_T, col_no);
             predictions.push_back(curr_dot_product);
         }
@@ -57,20 +57,15 @@ double LinearRegression::dot_product(std::vector<std::vector<double>> &X_T, int 
 
 std::vector<std::vector<double>> LinearRegression::transverse_matrix(std::vector<std::vector<double>> &X) {
     std::vector<std::vector<double>> trans_matrix;
-    for (int i = X.size() - 1; i >= 0; i--) {
-        trans_matrix.push_back(X[i]);
-    }
 
-    std::cout << trans_matrix[0].size() << "\n";
-
-    for (int i = 0; i < trans_matrix.size(); i++) {
-        for (int j = 0; j < trans_matrix[i].size(); j++) {
-            if (i == j) continue;
-            double temp = trans_matrix[i][j];
-            trans_matrix[i][j] = trans_matrix[j][i];
-            trans_matrix[j][i] = temp;
+    for (int j = 0; j < X[0].size(); j++) {
+        std::vector<double> x_T;
+        for (int i = 0; i < X.size(); i++) {
+            x_T.push_back(X[i][j]);
         }
+        trans_matrix.push_back(x_T);
     }
+
     return trans_matrix;
 }
 
@@ -79,11 +74,13 @@ void LinearRegression::adjust_weights(
         std::vector<double> &y,
         std::vector<std::vector<double>> &X) {
     for (int i = 0; i < y_hat.size(); i++) {
-        for (int j = 0; j < X[i].size(); j++) {
+        for (int j = 0; j < X[0].size(); j++) {
             double delta_theta_j = -eta * (y_hat[i] - y[i]) * X[i][j];
             params[j] += delta_theta_j;
         }
+        y_hat.pop_back();
     }
+    std::cout << y_hat.size() << "\n";
 }
 
 std::vector<std::vector<double>> extract_X(std::vector<std::vector<double>> total_data) {
