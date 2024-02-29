@@ -1,7 +1,6 @@
 #include "file_parsing.h"
 #include <vector>
 #include <cstdlib>
-#include <iostream>
 
 class LinearRegression {
 public:
