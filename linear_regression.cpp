@@ -61,12 +61,14 @@ std::vector<std::vector<double>> LinearRegression::transverse_matrix(std::vector
         trans_matrix.push_back(X[i]);
     }
 
+    std::cout << trans_matrix[0].size() << "\n";
+
     for (int i = 0; i < trans_matrix.size(); i++) {
-        for (int j = 0; i < trans_matrix[i].size(); j++) {
+        for (int j = 0; j < trans_matrix[i].size(); j++) {
             if (i == j) continue;
             double temp = trans_matrix[i][j];
             trans_matrix[i][j] = trans_matrix[j][i];
-            trans_matrix[j][i] = trans_matrix[i][j];
+            trans_matrix[j][i] = temp;
         }
     }
     return trans_matrix;
@@ -111,6 +113,9 @@ int main (int argc, char *argv[]) {
     std::vector<std::vector<double>> data = read_csv(filename);
     std::vector<double> y = extract_y(data);
     std::vector<std::vector<double>> X = extract_X(data);
-    std::cout << X[0].size() << "\n" << y[0] << "\n";
+    int n_epochs = 1000;
+    double eta = 0.0001;
+    LinearRegression model(eta, n_epochs);
+    model.fit(X, y);
     return 0;
 }
