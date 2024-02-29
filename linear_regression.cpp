@@ -12,7 +12,7 @@ public:
     std::vector<double> predict(std::vector<std::vector<double>> &X);
 
 private:
-    std::vector<std::vector<double>> transverse_matrix(std::vector<std::vector<double>> &X);
+    std::vector<std::vector<double>> transpose_matrix(std::vector<std::vector<double>> &X);
     double dot_product(std::vector<std::vector<double>> &X_T, int col_no);
     double get_average_error(std::vector<double> &y_hat, std::vector<double> &y);
     void adjust_weights(std::vector<double> &y_hat, std::vector<double> &y, std::vector<std::vector<double>> &X);
@@ -25,7 +25,7 @@ void LinearRegression::fit(std::vector<std::vector<double>> &X, std::vector<doub
     for (int i = 0; i < X[0].size(); i++)
         params.push_back(std::rand());
 
-    std::vector<std::vector<double>> X_T = transverse_matrix(X);
+    std::vector<std::vector<double>> X_T = transpose_matrix(X);
     std::vector<double> predictions;
 
     for (int epoch = 0; epoch < n_epoch; epoch++) {
@@ -40,7 +40,7 @@ void LinearRegression::fit(std::vector<std::vector<double>> &X, std::vector<doub
 }
 
 std::vector<double> LinearRegression::predict(std::vector<std::vector<double>> &X) {
-    std::vector<std::vector<double>> X_T = transverse_matrix(X);
+    std::vector<std::vector<double>> X_T = transpose_matrix(X);
     std::vector<double> y_hat;
     for (int i = 0; i < X.size(); i++) {
         y_hat.push_back(dot_product(X_T, i));
@@ -56,7 +56,7 @@ double LinearRegression::dot_product(std::vector<std::vector<double>> &X_T, int 
     return total;
 }
 
-std::vector<std::vector<double>> LinearRegression::transverse_matrix(std::vector<std::vector<double>> &X) {
+std::vector<std::vector<double>> LinearRegression::transpose_matrix(std::vector<std::vector<double>> &X) {
     std::vector<std::vector<double>> trans_matrix;
 
     for (int j = 0; j < X[0].size(); j++) {
