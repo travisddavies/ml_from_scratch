@@ -35,6 +35,8 @@ void LinearRegression::fit(std::vector<std::vector<double>> &X, std::vector<doub
             predictions.push_back(curr_dot_product);
         }
         adjust_weights(predictions, y, X);
+
+        predictions.clear();
     }
 }
 
@@ -79,7 +81,6 @@ void LinearRegression::adjust_weights(
             params[j] += delta_theta_j;
         }
     }
-    y_hat.clear();
 }
 
 std::vector<std::vector<double>> extract_X(std::vector<std::vector<double>> total_data) {
