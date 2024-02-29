@@ -5,12 +5,10 @@
 
 class LinearRegression {
 public:
-    LinearRegression(double eta, double bias, int n_epoch, int batch_no);
+    LinearRegression(double eta, int n_epoch);
     std::vector<double> params;
     double eta;
-    double bias;
     int n_epoch;
-    int batch_no;
     void fit(std::vector<std::vector<double>> &X, std::vector<double> &y);
     std::vector<double> predict(std::vector<std::vector<double>> &X);
 
@@ -21,8 +19,8 @@ private:
     void adjust_weights(std::vector<double> &y_hat, std::vector<double> &y, std::vector<std::vector<double>> &X);
 };
 
-LinearRegression::LinearRegression(double eta,double bias,int n_epoch, int batch_no)
-    :eta(eta), bias(bias), n_epoch(n_epoch), batch_no(batch_no) {}
+LinearRegression::LinearRegression(double eta, int n_epoch)
+    :eta(eta), n_epoch(n_epoch){}
 
 void LinearRegression::fit(std::vector<std::vector<double>> &X, std::vector<double> &y) {
     for (int i = 0; i < X[0].size(); i++)
